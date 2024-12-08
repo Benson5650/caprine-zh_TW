@@ -1,5 +1,5 @@
 import * as path from 'node:path';
-import {existsSync, writeFileSync} from 'node:fs';
+import { existsSync, writeFileSync } from 'node:fs';
 import {
 	app,
 	shell,
@@ -24,9 +24,9 @@ import {
 	toggleTrayIcon,
 	toggleLaunchMinimized,
 } from './util';
-import {generateSubmenu as generateEmojiSubmenu} from './emoji';
-import {toggleMenuBarMode} from './menu-bar-mode';
-import {caprineIconPath} from './constants';
+import { generateSubmenu as generateEmojiSubmenu } from './emoji';
+import { toggleMenuBarMode } from './menu-bar-mode';
+import { caprineIconPath } from './constants';
 
 export default async function updateMenu(): Promise<Menu> {
 	const newConversationItem: MenuItemConstructorOptions = {
@@ -57,7 +57,7 @@ export default async function updateMenu(): Promise<Menu> {
 			},
 		},
 		{
-			label: 'Switch to Messenger…',
+			label: '切換到 Messenger…',
 			accelerator: 'CommandOrControl+Shift+1',
 			visible: config.get('useWorkChat'),
 			click() {
@@ -67,7 +67,7 @@ export default async function updateMenu(): Promise<Menu> {
 			},
 		},
 		{
-			label: 'Log Out',
+			label: '登出',
 			click() {
 				sendAction('log-out');
 			},
@@ -76,7 +76,7 @@ export default async function updateMenu(): Promise<Menu> {
 
 	const vibrancySubmenu: MenuItemConstructorOptions[] = [
 		{
-			label: 'No Vibrancy',
+			label: '無背景模糊效果',
 			type: 'checkbox',
 			checked: config.get('vibrancy') === 'none',
 			async click() {
@@ -86,7 +86,7 @@ export default async function updateMenu(): Promise<Menu> {
 			},
 		},
 		{
-			label: 'Sidebar-only Vibrancy',
+			label: '僅側邊欄模糊',
 			type: 'checkbox',
 			checked: config.get('vibrancy') === 'sidebar',
 			async click() {
@@ -96,7 +96,7 @@ export default async function updateMenu(): Promise<Menu> {
 			},
 		},
 		{
-			label: 'Full-window Vibrancy',
+			label: '整個視窗模糊',
 			type: 'checkbox',
 			checked: config.get('vibrancy') === 'full',
 			async click() {
@@ -109,7 +109,7 @@ export default async function updateMenu(): Promise<Menu> {
 
 	const themeSubmenu: MenuItemConstructorOptions[] = [
 		{
-			label: 'Follow System Appearance',
+			label: '跟隨系統外觀',
 			type: 'checkbox',
 			checked: config.get('theme') === 'system',
 			async click() {
@@ -119,7 +119,7 @@ export default async function updateMenu(): Promise<Menu> {
 			},
 		},
 		{
-			label: 'Light Mode',
+			label: '淺色模式',
 			type: 'checkbox',
 			checked: config.get('theme') === 'light',
 			async click() {
@@ -129,7 +129,7 @@ export default async function updateMenu(): Promise<Menu> {
 			},
 		},
 		{
-			label: 'Dark Mode',
+			label: '深色模式',
 			type: 'checkbox',
 			checked: config.get('theme') === 'dark',
 			async click() {
@@ -142,7 +142,7 @@ export default async function updateMenu(): Promise<Menu> {
 
 	const sidebarSubmenu: MenuItemConstructorOptions[] = [
 		{
-			label: 'Adaptive Sidebar',
+			label: '自適應側邊欄',
 			type: 'checkbox',
 			checked: config.get('sidebar') === 'default',
 			async click() {
@@ -152,7 +152,7 @@ export default async function updateMenu(): Promise<Menu> {
 			},
 		},
 		{
-			label: 'Hide Sidebar',
+			label: '隱藏側邊欄',
 			type: 'checkbox',
 			checked: config.get('sidebar') === 'hidden',
 			accelerator: 'CommandOrControl+Shift+S',
@@ -164,7 +164,7 @@ export default async function updateMenu(): Promise<Menu> {
 			},
 		},
 		{
-			label: 'Narrow Sidebar',
+			label: '窄側邊欄',
 			type: 'checkbox',
 			checked: config.get('sidebar') === 'narrow',
 			async click() {
@@ -174,7 +174,7 @@ export default async function updateMenu(): Promise<Menu> {
 			},
 		},
 		{
-			label: 'Wide Sidebar',
+			label: '寬側邊欄',
 			type: 'checkbox',
 			checked: config.get('sidebar') === 'wide',
 			async click() {
@@ -187,7 +187,7 @@ export default async function updateMenu(): Promise<Menu> {
 
 	const privacySubmenu: MenuItemConstructorOptions[] = [
 		{
-			label: 'Block Seen Indicator',
+			label: '阻止已讀通知',
 			type: 'checkbox',
 			checked: config.get('block.chatSeen' as any),
 			click(menuItem) {
@@ -195,7 +195,7 @@ export default async function updateMenu(): Promise<Menu> {
 			},
 		},
 		{
-			label: 'Block Typing Indicator',
+			label: '阻止輸入中指示',
 			type: 'checkbox',
 			checked: config.get('block.typingIndicator' as any),
 			click(menuItem) {
@@ -203,7 +203,7 @@ export default async function updateMenu(): Promise<Menu> {
 			},
 		},
 		{
-			label: 'Block Delivery Receipts',
+			label: '阻止送達回條',
 			type: 'checkbox',
 			checked: config.get('block.deliveryReceipt' as any),
 			click(menuItem) {
@@ -214,7 +214,7 @@ export default async function updateMenu(): Promise<Menu> {
 
 	const advancedSubmenu: MenuItemConstructorOptions[] = [
 		{
-			label: 'Custom Styles',
+			label: '自訂樣式',
 			click() {
 				const filePath = path.join(app.getPath('userData'), 'custom.css');
 				const defaultCustomStyle = `/*
@@ -239,16 +239,16 @@ Press Command/Ctrl+R in Caprine to see your changes.
 		{
 			/* TODO: Fix privacy features */
 			/* If you want to help, see #1688 */
-			label: 'Privacy',
+			label: '隱私',
 			visible: is.development,
 			submenu: privacySubmenu,
 		},
 		{
-			label: 'Emoji Style',
+			label: '表情符號樣式',
 			submenu: await generateEmojiSubmenu(updateMenu),
 		},
 		{
-			label: 'Bounce Dock on Message',
+			label: '收到訊息時彈跳 Dock',
 			type: 'checkbox',
 			visible: is.macos,
 			checked: config.get('bounceDockOnMessage'),
@@ -259,7 +259,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 		{
 			/* TODO: Fix ability to disable autoplay */
 			/* GitHub issue: #1845 */
-			label: 'Autoplay Videos',
+			label: '自動播放影片',
 			id: 'video-autoplay',
 			type: 'checkbox',
 			visible: is.development,
@@ -271,7 +271,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 		},
 		{
 			/* TODO: Fix notifications */
-			label: 'Show Message Preview in Notifications',
+			label: '在通知中顯示訊息預覽',
 			type: 'checkbox',
 			visible: is.development,
 			checked: config.get('notificationMessagePreview'),
@@ -281,7 +281,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 		},
 		{
 			/* TODO: Fix notifications */
-			label: 'Mute Notifications',
+			label: '靜音通知',
 			id: 'mute-notifications',
 			type: 'checkbox',
 			visible: is.development,
@@ -291,7 +291,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			},
 		},
 		{
-			label: 'Mute Call Ringtone',
+			label: '靜音來電鈴聲',
 			type: 'checkbox',
 			checked: config.get('callRingtoneMuted'),
 			click() {
@@ -300,7 +300,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 		},
 		{
 			/* TODO: Fix notification badge */
-			label: 'Show Unread Badge',
+			label: '顯示未讀標記',
 			type: 'checkbox',
 			visible: is.development,
 			checked: config.get('showUnreadBadge'),
@@ -310,25 +310,25 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			},
 		},
 		{
-			label: 'Spell Checker',
+			label: '拼字檢查',
 			type: 'checkbox',
 			checked: config.get('isSpellCheckerEnabled'),
 			click() {
 				config.set('isSpellCheckerEnabled', !config.get('isSpellCheckerEnabled'));
-				showRestartDialog('Caprine needs to be restarted to enable or disable the spell checker.');
+				showRestartDialog('需要重新啟動以啟用或停用拼字檢查。');
 			},
 		},
 		{
-			label: 'Hardware Acceleration',
+			label: '硬體加速',
 			type: 'checkbox',
 			checked: config.get('hardwareAcceleration'),
 			click() {
 				config.set('hardwareAcceleration', !config.get('hardwareAcceleration'));
-				showRestartDialog('Caprine needs to be restarted to change hardware acceleration.');
+				showRestartDialog('需要重新啟動以更改硬體加速設定。');
 			},
 		},
 		{
-			label: 'Show Menu Bar Icon',
+			label: '顯示選單欄圖示',
 			id: 'menuBarMode',
 			type: 'checkbox',
 			visible: is.macos,
@@ -339,7 +339,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			},
 		},
 		{
-			label: 'Always on Top',
+			label: '總是置頂',
 			id: 'always-on-top',
 			type: 'checkbox',
 			accelerator: 'CommandOrControl+Shift+T',
@@ -347,15 +347,15 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			async click(menuItem, focusedWindow, event) {
 				if (!config.get('alwaysOnTop') && config.get('showAlwaysOnTopPrompt') && event.shiftKey) {
 					const result = await dialog.showMessageBox(focusedWindow!, {
-						message: 'Are you sure you want the window to stay on top of other windows?',
-						detail: 'This was triggered by Command/Control+Shift+T.',
+						message: '確定要讓視窗保持在其他視窗之上嗎？',
+						detail: '這是由 Command/Control+Shift+T 觸發的。',
 						buttons: [
-							'Display on Top',
-							'Don\'t Display on Top',
+							'顯示在最上層',
+							'不要顯示在最上層',
 						],
 						defaultId: 0,
 						cancelId: 1,
-						checkboxLabel: 'Don\'t ask me again',
+						checkboxLabel: '不要再顯示此提示',
 					});
 
 					config.set('showAlwaysOnTopPrompt', !result.checkboxChecked);
@@ -374,7 +374,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 		},
 		{
 			/* TODO: Add support for Linux */
-			label: 'Launch at Login',
+			label: '開機啟動',
 			visible: !is.linux,
 			type: 'checkbox',
 			checked: app.getLoginItemSettings().openAtLogin,
@@ -386,7 +386,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			},
 		},
 		{
-			label: 'Auto Hide Menu Bar',
+			label: '自動隱藏選單欄',
 			type: 'checkbox',
 			visible: !is.macos,
 			checked: config.get('autoHideMenuBar'),
@@ -398,14 +398,14 @@ Press Command/Ctrl+R in Caprine to see your changes.
 				if (menuItem.checked) {
 					dialog.showMessageBox({
 						type: 'info',
-						message: 'Press the Alt key to toggle the menu bar.',
-						buttons: ['OK'],
+						message: '按 Alt 鍵切換選單欄。',
+						buttons: ['確定'],
 					});
 				}
 			},
 		},
 		{
-			label: 'Automatic Updates',
+			label: '自動更新',
 			type: 'checkbox',
 			checked: config.get('autoUpdate'),
 			click() {
@@ -414,7 +414,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 		},
 		{
 			/* TODO: Fix notifications */
-			label: 'Flash Window on Message',
+			label: '收到訊息時閃爍視窗',
 			type: 'checkbox',
 			visible: is.development,
 			checked: config.get('flashWindowOnMessage'),
@@ -424,7 +424,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 		},
 		{
 			id: 'showTrayIcon',
-			label: 'Show Tray Icon',
+			label: '顯示系統列圖示',
 			type: 'checkbox',
 			enabled: !is.macos && !config.get('launchMinimized'),
 			checked: config.get('showTrayIcon'),
@@ -433,7 +433,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			},
 		},
 		{
-			label: 'Launch Minimized',
+			label: '最小化啟動',
 			type: 'checkbox',
 			visible: !is.macos,
 			checked: config.get('launchMinimized'),
@@ -442,7 +442,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			},
 		},
 		{
-			label: 'Quit on Window Close',
+			label: '關閉視窗時退出',
 			type: 'checkbox',
 			checked: config.get('quitOnWindowClose'),
 			click() {
@@ -453,28 +453,28 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			type: 'separator',
 		},
 		{
-			label: 'Advanced',
+			label: '進階',
 			submenu: advancedSubmenu,
 		},
 	];
 
 	const viewSubmenu: MenuItemConstructorOptions[] = [
 		{
-			label: 'Reset Text Size',
+			label: '重設文字大小',
 			accelerator: 'CommandOrControl+0',
 			click() {
 				sendAction('zoom-reset');
 			},
 		},
 		{
-			label: 'Increase Text Size',
+			label: '放大文字大小',
 			accelerator: 'CommandOrControl+Plus',
 			click() {
 				sendAction('zoom-in');
 			},
 		},
 		{
-			label: 'Decrease Text Size',
+			label: '縮小文字大小',
 			accelerator: 'CommandOrControl+-',
 			click() {
 				sendAction('zoom-out');
@@ -484,11 +484,11 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			type: 'separator',
 		},
 		{
-			label: 'Theme',
+			label: '主題',
 			submenu: themeSubmenu,
 		},
 		{
-			label: 'Vibrancy',
+			label: '背景模糊效果',
 			visible: is.macos,
 			submenu: vibrancySubmenu,
 		},
@@ -496,7 +496,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			type: 'separator',
 		},
 		{
-			label: 'Hide Names and Avatars',
+			label: '隱藏名稱與頭像',
 			id: 'privateMode',
 			type: 'checkbox',
 			checked: config.get('privateMode'),
@@ -504,15 +504,15 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			async click(menuItem, _browserWindow, event) {
 				if (!config.get('privateMode') && config.get('showPrivateModePrompt') && event.shiftKey) {
 					const result = await dialog.showMessageBox(_browserWindow!, {
-						message: 'Are you sure you want to hide names and avatars?',
-						detail: 'This was triggered by Command/Control+Shift+N.',
+						message: '確定要隱藏名稱與頭像嗎？',
+						detail: '這是由 Command/Control+Shift+N 觸發的。',
 						buttons: [
-							'Hide',
-							'Don\'t Hide',
+							'隱藏',
+							'不要隱藏',
 						],
 						defaultId: 0,
 						cancelId: 1,
-						checkboxLabel: 'Don\'t ask me again',
+						checkboxLabel: '不要再顯示此提示',
 					});
 
 					config.set('showPrivateModePrompt', !result.checkboxChecked);
@@ -533,11 +533,11 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			type: 'separator',
 		},
 		{
-			label: 'Sidebar',
+			label: '側邊欄',
 			submenu: sidebarSubmenu,
 		},
 		{
-			label: 'Show Message Buttons',
+			label: '顯示訊息按鈕',
 			type: 'checkbox',
 			checked: config.get('showMessageButtons'),
 			click() {
@@ -549,25 +549,25 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			type: 'separator',
 		},
 		{
-			label: 'Show Main Chats',
+			label: '顯示主要聊天',
 			click() {
 				sendAction('show-chats-view');
 			},
 		},
 		{
-			label: 'Show Marketplace Chats',
+			label: '顯示市場聊天',
 			click() {
 				sendAction('show-marketplace-view');
 			},
 		},
 		{
-			label: 'Show Message Requests',
+			label: '顯示訊息請求',
 			click() {
 				sendAction('show-requests-view');
 			},
 		},
 		{
-			label: 'Show Archived Chats',
+			label: '顯示已封存聊天',
 			click() {
 				sendAction('show-archive-view');
 			},
@@ -578,84 +578,84 @@ Press Command/Ctrl+R in Caprine to see your changes.
 
 	const conversationSubmenu: MenuItemConstructorOptions[] = [
 		{
-			label: 'Mute Conversation',
+			label: '靜音對話',
 			accelerator: 'CommandOrControl+Shift+M',
 			click() {
 				sendAction('mute-conversation');
 			},
 		},
 		{
-			label: 'Archive Conversation',
+			label: '封存對話',
 			accelerator: 'CommandOrControl+Shift+H',
 			click() {
 				sendAction('archive-conversation');
 			},
 		},
 		{
-			label: 'Delete Conversation',
+			label: '刪除對話',
 			accelerator: 'CommandOrControl+Shift+D',
 			click() {
 				sendAction('delete-conversation');
 			},
 		},
 		{
-			label: 'Select Next Conversation',
+			label: '選擇下一個對話',
 			accelerator: 'Control+Tab',
 			click() {
 				sendAction('next-conversation');
 			},
 		},
 		{
-			label: 'Select Previous Conversation',
+			label: '選擇上一個對話',
 			accelerator: 'Control+Shift+Tab',
 			click() {
 				sendAction('previous-conversation');
 			},
 		},
 		{
-			label: 'Find Conversation',
+			label: '尋找對話',
 			accelerator: 'CommandOrControl+K',
 			click() {
 				sendAction('find');
 			},
 		},
 		{
-			label: 'Search in Conversation',
+			label: '在對話中搜尋',
 			accelerator: 'CommandOrControl+F',
 			click() {
 				sendAction('search');
 			},
 		},
 		{
-			label: 'Insert GIF',
+			label: '插入 GIF',
 			accelerator: 'CommandOrControl+G',
 			click() {
 				sendAction('insert-gif');
 			},
 		},
 		{
-			label: 'Insert Sticker',
+			label: '插入貼圖',
 			accelerator: 'CommandOrControl+S',
 			click() {
 				sendAction('insert-sticker');
 			},
 		},
 		{
-			label: 'Insert Emoji',
+			label: '插入表情符號',
 			accelerator: 'CommandOrControl+E',
 			click() {
 				sendAction('insert-emoji');
 			},
 		},
 		{
-			label: 'Attach Files',
+			label: '附加檔案',
 			accelerator: 'CommandOrControl+T',
 			click() {
 				sendAction('attach-files');
 			},
 		},
 		{
-			label: 'Focus Text Input',
+			label: '聚焦文字輸入',
 			accelerator: 'CommandOrControl+I',
 			click() {
 				sendAction('focus-text-input');
@@ -665,7 +665,7 @@ Press Command/Ctrl+R in Caprine to see your changes.
 			type: 'separator',
 		},
 		{
-			label: 'Spell Checker Language',
+			label: '拼字檢查語言',
 			visible: !is.macos && config.get('isSpellCheckerEnabled'),
 			submenu: spellCheckerSubmenu,
 		},
@@ -673,22 +673,22 @@ Press Command/Ctrl+R in Caprine to see your changes.
 
 	const helpSubmenu: MenuItemConstructorOptions[] = [
 		openUrlMenuItem({
-			label: 'Website',
+			label: '網站',
 			url: 'https://github.com/sindresorhus/caprine',
 		}),
 		openUrlMenuItem({
-			label: 'Source Code',
+			label: '原始碼',
 			url: 'https://github.com/sindresorhus/caprine',
 		}),
 		openUrlMenuItem({
-			label: 'Donate…',
+			label: '捐助…',
 			url: 'https://github.com/sindresorhus/caprine?sponsor=1',
 		}),
 		{
-			label: 'Report an Issue…',
+			label: '回報問題…',
 			click() {
 				const body = `
-<!-- Please succinctly describe your issue and steps to reproduce it. -->
+<!-- 請簡要描述您的問題和重現步驟。 -->
 
 
 ---
@@ -711,8 +711,8 @@ ${debugInfo()}`;
 			},
 			aboutMenuItem({
 				icon: caprineIconPath,
-				copyright: 'Created by Sindre Sorhus',
-				text: 'Maintainers:\nDušan Simić\nLefteris Garyfalakis\nMichael Quevillon\nNikolas Spiridakis',
+				copyright: '由 Sindre Sorhus 創建',
+				text: '維護者：\nDušan Simić\nLefteris Garyfalakis\nMichael Quevillon\nNikolas Spiridakis',
 				website: 'https://github.com/sindresorhus/caprine',
 			}),
 		);
@@ -720,13 +720,13 @@ ${debugInfo()}`;
 
 	const debugSubmenu: MenuItemConstructorOptions[] = [
 		{
-			label: 'Show Settings',
+			label: '顯示設定',
 			click() {
 				config.openInEditor();
 			},
 		},
 		{
-			label: 'Show App Data',
+			label: '顯示應用資料',
 			click() {
 				shell.openPath(app.getPath('userData'));
 			},
@@ -735,7 +735,7 @@ ${debugInfo()}`;
 			type: 'separator',
 		},
 		{
-			label: 'Delete Settings',
+			label: '刪除設定',
 			click() {
 				config.clear();
 				app.relaunch();
@@ -743,7 +743,7 @@ ${debugInfo()}`;
 			},
 		},
 		{
-			label: 'Delete App Data',
+			label: '刪除應用資料',
 			click() {
 				shell.trashItem(app.getPath('userData'));
 				app.relaunch();
@@ -755,11 +755,11 @@ ${debugInfo()}`;
 	const macosTemplate: MenuItemConstructorOptions[] = [
 		appMenu([
 			{
-				label: 'Caprine Preferences',
+				label: 'Caprine 偏好設定',
 				submenu: preferencesSubmenu,
 			},
 			{
-				label: 'Messenger Preferences…',
+				label: 'Messenger 偏好設定…',
 				accelerator: 'Command+,',
 				click() {
 					sendAction('show-preferences');
@@ -773,7 +773,7 @@ ${debugInfo()}`;
 				type: 'separator',
 			},
 			{
-				label: 'Relaunch Caprine',
+				label: '重新啟動 Caprine',
 				click() {
 					app.relaunch();
 					app.quit();
@@ -801,7 +801,7 @@ ${debugInfo()}`;
 			submenu: viewSubmenu,
 		},
 		{
-			label: 'Conversation',
+			label: '對話',
 			submenu: conversationSubmenu,
 		},
 		{
@@ -823,11 +823,11 @@ ${debugInfo()}`;
 					type: 'separator',
 				},
 				{
-					label: 'Caprine Settings',
+					label: 'Caprine 設定',
 					submenu: preferencesSubmenu,
 				},
 				{
-					label: 'Messenger Settings',
+					label: 'Messenger 設定',
 					accelerator: 'Control+,',
 					click() {
 						sendAction('show-preferences');
@@ -841,7 +841,7 @@ ${debugInfo()}`;
 					type: 'separator',
 				},
 				{
-					label: 'Relaunch Caprine',
+					label: '重新啟動 Caprine',
 					click() {
 						app.relaunch();
 						app.quit();
@@ -860,7 +860,7 @@ ${debugInfo()}`;
 			submenu: viewSubmenu,
 		},
 		{
-			label: 'Conversation',
+			label: '對話',
 			submenu: conversationSubmenu,
 		},
 		{
@@ -873,7 +873,7 @@ ${debugInfo()}`;
 
 	if (is.development) {
 		template.push({
-			label: 'Debug',
+			label: '除錯',
 			submenu: debugSubmenu,
 		});
 	}
