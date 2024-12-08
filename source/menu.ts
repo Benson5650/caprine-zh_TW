@@ -30,7 +30,7 @@ import {caprineIconPath} from './constants';
 
 export default async function updateMenu(): Promise<Menu> {
 	const newConversationItem: MenuItemConstructorOptions = {
-		label: 'New Conversation',
+		label: '開啟新對話',
 		accelerator: 'CommandOrControl+N',
 		click() {
 			sendAction('new-conversation');
@@ -38,7 +38,7 @@ export default async function updateMenu(): Promise<Menu> {
 	};
 
 	const newRoomItem: MenuItemConstructorOptions = {
-		label: 'New Room',
+		label: '開啟新房間',
 		accelerator: 'CommandOrControl+O',
 		click() {
 			sendAction('new-room');
@@ -47,7 +47,7 @@ export default async function updateMenu(): Promise<Menu> {
 
 	const switchItems: MenuItemConstructorOptions[] = [
 		{
-			label: 'Switch to Work Chat…',
+			label: '切換到工作聊天',
 			accelerator: 'CommandOrControl+Shift+2',
 			visible: !config.get('useWorkChat'),
 			click() {
